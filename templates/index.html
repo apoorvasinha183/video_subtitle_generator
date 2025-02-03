@@ -1,0 +1,91 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Video Subtitle Generator</title>
+    <style>
+        #progress-container {
+            width: 100%;
+            background-color: #ddd;
+        }
+        #progress-bar {
+            width: 0%;
+            height: 30px;
+            background-color: #4CAF50;
+            text-align: center;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Upload a Video File</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <label for="video">Choose a video file:</label>
+        <input type="file" name="video" id="video" accept="video/*" required>
+        <br><br>
+        <!-- Dropdown for model size -->
+        <label for="model_size">Model Size:</label>
+        <select name="model_size" id="model_size">
+            <option value="tiny">Tiny</option>
+            <option value="small">Small</option>
+            <option value="medium">Medium</option>
+        </select>
+        <br><br>
+        <!-- Radio buttons for target language (optional) -->
+        <label>Target Language:</label>
+        <input type="radio" id="none" name="target_lang" value="" checked>
+        <label for="none">None</label>
+        <input type="radio" id="hi" name="target_lang" value="hi">
+        <label for="hi">Hindi</label>
+        <input type="radio" id="fr" name="target_lang" value="fr">
+        <label for="fr">French</label>
+        <!-- Add more languages as needed -->
+        <br><br>
+        <button type="submit">Generate Subtitles</button>
+    </form>
+
+    <h2>Progress</h2>
+    <div id="progress-container">
+        <div id="progress-bar">0%</div>
+    </div>
+
+    <script>
+        const form = document.getElementById('upload-form');
+        const progressBar = document.getElementById('progress-bar');
+        let jobId = null;
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(form);
+            fetch('/upload', { method: 'POST', body: formData })
+            .then(response => response.json())
+            .then(data => {
+                jobId = data.job_id;
+                // Start polling progress
+                pollProgress();
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        function pollProgress() {
+            if (!jobId) return;
+            fetch('/progress?job_id=' + jobId)
+            .then(response => response.json())
+            .then(data => {
+                if (data.progress >= 0) {
+                    progressBar.style.width = data.progress + '%';
+                    progressBar.innerHTML = data.progress + '%';
+                    // Continue polling until 100% (or error indicated by -1)
+                    if (data.progress < 100) {
+                        setTimeout(pollProgress, 1000);
+                    } else {
+                        progressBar.innerHTML = "Completed!";
+                    }
+                } else {
+                    progressBar.innerHTML = "Error occurred";
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>

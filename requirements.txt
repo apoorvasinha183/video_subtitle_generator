@@ -8,3 +8,4 @@ pytest
 transformers
 sentencepiece
 torch
+flask

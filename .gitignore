@@ -171,5 +171,5 @@ cython_debug/
 .pypirc
 
 #Garbage outputs
-*.srt
+subtitles.srt
 *.wav

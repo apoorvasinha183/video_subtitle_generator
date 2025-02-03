@@ -20,7 +20,7 @@ from app.config import TEMP_AUDIO_DIR
 # Command Line Processing Mode
 # ------------------------------
 
-def process_video(input_video: str, output_srt: str, model_size: str = "tiny",target_lang: str = None) -> None:
+def process_video(input_video: str, output_srt: str, model_size: str = "tiny",target_lang: str = None, progress_callback=None) -> None:
     """
     Process the video file:
       1. Extract audio.
@@ -44,13 +44,14 @@ def process_video(input_video: str, output_srt: str, model_size: str = "tiny",ta
         # Step 2: Split audio into overlapping chunks
         chunks = split_audio(audio_file)
         print(f"[INFO] Split audio into {len(chunks)} chunks")
-
+        total_chunks = len(chunks)
         # Step 3: Load ASR model
         model = load_model(model_size)
         print(f"[INFO] Loaded Whisper model ({model_size})")
 
         # Step 4: Transcribe each chunk and adjust timestamps
         all_segments = []
+        chunk_num_processed = 0
         for chunk_file, offset_ms in tqdm(chunks,desc="Processing audio chunks"):
             result = transcribe_audio(model, chunk_file)
             # Each result contains segments relative to the chunk start (in seconds)
@@ -62,6 +63,9 @@ def process_video(input_video: str, output_srt: str, model_size: str = "tiny",ta
                 }
                 all_segments.append(adjusted_seg)
             #print(f"[INFO] Processed chunk at offset {offset_ms} ms")
+            chunk_num_processed += 1
+            if progress_callback:
+                progress_callback(chunk_num_processed,total_chunks)
         # Optional Step 5: Translation
         if target_lang is not None:
             from app.translator import load_translation_model, translate_text
