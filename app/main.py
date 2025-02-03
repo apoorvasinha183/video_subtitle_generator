@@ -64,7 +64,7 @@ def process_video(input_video: str, output_srt: str, model_size: str = "tiny",ta
                 all_segments.append(adjusted_seg)
             #print(f"[INFO] Processed chunk at offset {offset_ms} ms")
             chunk_num_processed += 1
-            if progress_callback:
+            if progress_callback :
                 progress_callback(chunk_num_processed,total_chunks)
         # Optional Step 5: Translation
         if target_lang is not None:

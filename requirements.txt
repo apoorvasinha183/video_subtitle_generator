@@ -9,3 +9,4 @@ transformers
 sentencepiece
 torch
 flask
+flask_cors

@@ -4,14 +4,15 @@ import os
 import tempfile
 import threading
 import uuid
+from flask_cors import CORS
 from flask import Flask, render_template, request, jsonify, send_file
 from app.main import process_video  # reuse your processing pipeline
-
+import warnings
 app = Flask(__name__)
-
+CORS(app)
 # Global dictionary to store job progress (job_id -> progress percentage)
 job_progress = {}
-
+warnings.filterwarnings("ignore", category=UserWarning)
 @app.route('/', methods=['GET'])
 def index():
     # Render a form with additional options (see next section for the template)
@@ -79,4 +80,4 @@ def download():
     return send_file(output_srt, as_attachment=True, download_name="subtitles.srt")
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True,host='0.0.0.0' ,port=5001)
