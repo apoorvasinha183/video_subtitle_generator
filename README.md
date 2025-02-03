@@ -10,7 +10,6 @@ A simple, real‑time video automated subtitle generator using pre‑trained ASR
 - **Subtitle Generation:** Generates SRT subtitle files.
 - **API Mode:** Provides a FastAPI endpoint for video file uploads.
 - **Containerization:** Dockerfile provided for containerized deployment.
-- **CI/CD:** GitHub Actions workflow for testing.
 
 ## Requirements
 
@@ -24,3 +23,7 @@ A simple, real‑time video automated subtitle generator using pre‑trained ASR
 
 ```bash
 python -m app.main --video path/to/video.mp4 --output subtitles.srt
+
+
+
+
