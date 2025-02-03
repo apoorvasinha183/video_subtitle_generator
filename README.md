@@ -1,6 +1,6 @@
 # Video Subtitle Generator
 
-A simple, real‑time video automated subtitle generator using pre‑trained ASR (Whisper) and FastAPI.
+A simple, real‑time video automated subtitle generator using pre‑trained ASR (Whisper) and FastAPI.It also supports translation using MarianMT by HuggingFace.
 
 ## Features
 
