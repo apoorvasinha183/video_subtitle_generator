@@ -8,8 +8,9 @@ A simple, real‑time video automated subtitle generator using pre‑trained ASR
 - **Audio Chunking:** Splits audio into overlapping chunks for near real‑time processing.
 - **ASR:** Uses OpenAI's Whisper (tiny model by default) for transcription.
 - **Subtitle Generation:** Generates SRT subtitle files.
-- **API Mode:** Provides a FastAPI endpoint for video file uploads.
+- **API Mode:** Provides a FastAPI endpoint for video file uploads. (Under construction)
 - **Containerization:** Dockerfile provided for containerized deployment.
+- **Translation:** Supports the translation from English to a target language supported by the MarianMT HF model
 
 ## Requirements
 
