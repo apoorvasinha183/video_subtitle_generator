@@ -1,10 +1,9 @@
-
 ```markdown
 # Video Subtitle Generator
 
-A simple,  video automated subtitle generator that uses pre‑trained ASR (Whisper) and a Flask API backend. It also supports translation using MarianMT from HuggingFace and includes a React-based web interface for uploading videos, selecting options, and tracking progress.
+A simple, real‑time video automated subtitle generator that uses pre‑trained ASR (Whisper) and a Flask API backend. It also supports translation using MarianMT from HuggingFace and includes a React-based web interface for uploading videos, selecting options, and tracking progress.
 
-
+---
 
 ## Features
 
@@ -16,8 +15,9 @@ A simple,  video automated subtitle generator that uses pre‑trained ASR (Whisp
 - **Translation:** Supports translation from English to a target language supported by the MarianMT HuggingFace model.
 - **Frontend Interface:** A React-based web interface for file uploads, extra option selection (model size, target language), and a dynamic progress bar.
 - **Containerization:** Dockerfile provided for containerized deployment.
+- **CI/CD:** GitHub Actions for automated testing and deployment.
 
-
+---
 
 ## Requirements
 
@@ -27,22 +27,36 @@ A simple,  video automated subtitle generator that uses pre‑trained ASR (Whisp
 - See **`requirements.txt`** for Python dependencies
 - See **`package.json`** for JavaScript dependencies
 
-
+---
 
 ## Project Structure
 
-```
+```plaintext
 video_subtitle_generator/
-├── app/               # Core processing pipeline (audio extraction, ASR, translation, SRT generation)
-├── flask_app.py       # Flask API that handles file uploads, progress reporting, and subtitle download
-├── templates/         # HTML templates for the Flask app (if needed)
-├── frontend/          # React (or Vite) frontend project for uploading videos and displaying progress
-├── Dockerfile         # For containerizing the application
-├── requirements.txt   # Python dependencies
-└── README.md          # This file
+├── app/                   # Core processing pipeline (audio extraction, ASR, translation, SRT generation)
+│   ├── audio_extractor.py
+│   ├── asr.py
+│   ├── subtitle_generator.py
+│   ├── translator.py
+│   └── main.py            # Main processing pipeline script
+├── flask_app.py           # Flask API that handles file uploads, progress reporting, and subtitle downloads
+├── templates/             # HTML templates for Flask app (if needed)
+├── frontend/              # React (or Vite) frontend project for uploading videos and displaying progress
+│   ├── src/
+│   │   ├── App.jsx
+│   │   ├── components/
+│   │   ├── styles/
+│   │   ├── main.jsx
+│   │   └── index.css
+│   ├── package.json       # JavaScript dependencies
+│   └── public/            # Static assets
+├── Dockerfile             # For containerizing the application
+├── requirements.txt       # Python dependencies
+├── .github/workflows/     # CI/CD setup for GitHub Actions
+└── README.md              # This file
 ```
 
-
+---
 
 ## Usage
 
@@ -62,7 +76,7 @@ video_subtitle_generator/
    - **`/progress`**: Accepts a job ID and returns the current processing progress.
    - **`/download`**: Allows downloading the generated SRT subtitle file once processing is complete.
 
-
+---
 
 ### 🔹 Running the Frontend (React)
 
@@ -83,7 +97,7 @@ video_subtitle_generator/
    - The progress bar will update as the backend processes the video.
    - Once processing is complete, download the generated subtitle file.
 
-
+---
 
 ### 🔹 Command-Line Processing (Optional)
 
@@ -93,7 +107,7 @@ If you prefer running the processing pipeline directly (without the web interfac
 python -m app.main --video path/to/video.mp4 --output subtitles.srt
 ```
 
-
+---
 
 ### 🔹 Docker Deployment
 
@@ -104,4 +118,9 @@ docker build -t video_subtitle_generator .
 docker run -p 5001:5001 video_subtitle_generator
 ```
 
+---
 
+## License
+
+This project is licensed under the **MIT License**.
+```
