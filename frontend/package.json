@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start-all": "concurrently \"npm run dev\" \"cd .. && python flask_app.py\""
+    "start-all": "concurrently \"npm run dev\" \"cd ..  && python flask_app.py\""
   },
   "dependencies": {
     "react": "^18.3.1",
