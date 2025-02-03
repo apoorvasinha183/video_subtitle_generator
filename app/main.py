@@ -6,6 +6,9 @@ import tempfile
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
 import uvicorn
+import warnings
+from tqdm import tqdm
+
 
 from app.audio_extractor import extract_audio, split_audio
 from app.asr import load_model, transcribe_audio
@@ -17,7 +20,7 @@ from app.config import TEMP_AUDIO_DIR
 # Command Line Processing Mode
 # ------------------------------
 
-def process_video(input_video: str, output_srt: str, model_size: str = "tiny") -> None:
+def process_video(input_video: str, output_srt: str, model_size: str = "tiny",target_lang: str = None) -> None:
     """
     Process the video file:
       1. Extract audio.
@@ -25,6 +28,9 @@ def process_video(input_video: str, output_srt: str, model_size: str = "tiny") -
       3. Transcribe each chunk.
       4. Adjust segment timestamps.
       5. Generate SRT subtitles.
+      6. Generate SRT subtitles.
+    
+    If target_lang is provided (e.g., "fr"), the transcription text will be translated.
     """
     # Create a temporary directory to store intermediate files
     temp_dir = tempfile.mkdtemp()
@@ -45,7 +51,7 @@ def process_video(input_video: str, output_srt: str, model_size: str = "tiny") -
 
         # Step 4: Transcribe each chunk and adjust timestamps
         all_segments = []
-        for chunk_file, offset_ms in chunks:
+        for chunk_file, offset_ms in tqdm(chunks,desc="Processing audio chunks"):
             result = transcribe_audio(model, chunk_file)
             # Each result contains segments relative to the chunk start (in seconds)
             for seg in result.get("segments", []):
@@ -55,8 +61,17 @@ def process_video(input_video: str, output_srt: str, model_size: str = "tiny") -
                     "text": seg["text"]
                 }
                 all_segments.append(adjusted_seg)
-            print(f"[INFO] Processed chunk at offset {offset_ms} ms")
-
+            #print(f"[INFO] Processed chunk at offset {offset_ms} ms")
+        # Optional Step 5: Translation
+        if target_lang is not None:
+            from app.translator import load_translation_model, translate_text
+            # For now, we assume the source language is English ("en")
+            tokenizer, translation_model = load_translation_model("en", target_lang)
+            print(f"[INFO] Loaded translation model for en -> {target_lang}")
+            for seg in all_segments:
+                original_text = seg["text"]
+                seg["text"] = translate_text(original_text, tokenizer, translation_model)
+                print(f"[INFO] Translated: '{original_text}' -> '{seg['text']}'")
         # Optional: Sort segments by start time
         all_segments = sorted(all_segments, key=lambda x: x["start"])
 
@@ -106,11 +121,12 @@ async def upload_video(file: UploadFile = File(...)):
 
 if __name__ == "__main__":
     import argparse
-
+    warnings.filterwarnings("ignore", category=UserWarning)
     parser = argparse.ArgumentParser(description="Video Automated Subtitle Generator")
     parser.add_argument("--video", type=str, help="Path to the video file")
     parser.add_argument("--output", type=str, default="output.srt", help="Path for the output SRT file")
     parser.add_argument("--model", type=str, default="tiny", help="Whisper model size (e.g., tiny, small)")
+    parser.add_argument("--target-lang", type=str, default=None, help="Target language code for translation (e.g., 'fr' for French)")
     parser.add_argument("--api", action="store_true", help="Run as an API server")
     args = parser.parse_args()
 

@@ -13,7 +13,8 @@ def test_transcribe_audio():
         tmp_audio_path = tmp_audio.name
 
     try:
-        model = load_model("tiny")
+        #model = load_model("tiny")
+        model = load_model("medium")
         result = transcribe_audio(model, tmp_audio_path)
         # The result should be a dict with a 'segments' key (even if empty)
         assert isinstance(result, dict)
