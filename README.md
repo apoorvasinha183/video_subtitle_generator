@@ -1,7 +1,7 @@
-```markdown
+
 # Video Subtitle Generator
 
-A simple, real‑time video automated subtitle generator that uses pre‑trained ASR (Whisper) and a Flask API backend. It also supports translation using MarianMT from HuggingFace and includes a React-based web interface for uploading videos, selecting options, and tracking progress.
+A simple, video automated subtitle generator that uses pre‑trained ASR (Whisper) and a Flask API backend. It also supports translation using MarianMT from HuggingFace and includes a React-based web interface for uploading videos, selecting options, and tracking progress.
 
 ---
 
@@ -31,7 +31,7 @@ A simple, real‑time video automated subtitle generator that uses pre‑trained
 
 ## Project Structure
 
-```plaintext
+```
 video_subtitle_generator/
 ├── app/                   # Core processing pipeline (audio extraction, ASR, translation, SRT generation)
 │   ├── audio_extractor.py
@@ -119,8 +119,3 @@ docker run -p 5001:5001 video_subtitle_generator
 ```
 
 ---
-
-## License
-
-This project is licensed under the **MIT License**.
-```
