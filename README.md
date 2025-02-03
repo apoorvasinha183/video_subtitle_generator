@@ -1,11 +1,10 @@
-Here is your properly formatted **Markdown** (`README.md`) file:
 
 ```markdown
 # Video Subtitle Generator
 
 A simple,  video automated subtitle generator that uses pre‑trained ASR (Whisper) and a Flask API backend. It also supports translation using MarianMT from HuggingFace and includes a React-based web interface for uploading videos, selecting options, and tracking progress.
 
----
+
 
 ## Features
 
@@ -18,7 +17,7 @@ A simple,  video automated subtitle generator that uses pre‑trained ASR (Whisp
 - **Frontend Interface:** A React-based web interface for file uploads, extra option selection (model size, target language), and a dynamic progress bar.
 - **Containerization:** Dockerfile provided for containerized deployment.
 
----
+
 
 ## Requirements
 
@@ -28,7 +27,7 @@ A simple,  video automated subtitle generator that uses pre‑trained ASR (Whisp
 - See **`requirements.txt`** for Python dependencies
 - See **`package.json`** for JavaScript dependencies
 
----
+
 
 ## Project Structure
 
@@ -43,7 +42,7 @@ video_subtitle_generator/
 └── README.md          # This file
 ```
 
----
+
 
 ## Usage
 
@@ -63,7 +62,7 @@ video_subtitle_generator/
    - **`/progress`**: Accepts a job ID and returns the current processing progress.
    - **`/download`**: Allows downloading the generated SRT subtitle file once processing is complete.
 
----
+
 
 ### 🔹 Running the Frontend (React)
 
@@ -84,7 +83,7 @@ video_subtitle_generator/
    - The progress bar will update as the backend processes the video.
    - Once processing is complete, download the generated subtitle file.
 
----
+
 
 ### 🔹 Command-Line Processing (Optional)
 
@@ -94,7 +93,7 @@ If you prefer running the processing pipeline directly (without the web interfac
 python -m app.main --video path/to/video.mp4 --output subtitles.srt
 ```
 
----
+
 
 ### 🔹 Docker Deployment
 
@@ -105,5 +104,4 @@ docker build -t video_subtitle_generator .
 docker run -p 5001:5001 video_subtitle_generator
 ```
 
----
 
