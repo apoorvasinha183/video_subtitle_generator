@@ -1,6 +1,4 @@
-# .github/workflows/ci.yml
-
-name: CI
+name: CI/CD Pipeline
 
 on:
   push:
@@ -9,25 +7,45 @@ on:
     branches: [ main ]
 
 jobs:
-  build-test:
+  backend-tests:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v3
-
       - name: Set up Python 3.9
         uses: actions/setup-python@v4
         with:
-          python-version: 3.9
-
-      - name: Install dependencies
+          python-version: '3.9'
+      - name: Install Python Dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg
-          pip install --upgrade pip
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
-
-      - name: Run Tests
+      - name: Run Python Tests
         run: |
           pytest --maxfail=1 --disable-warnings -q
+
+  frontend-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Install Frontend Dependencies
+        working-directory: frontend
+        run: npm install
+      - name: Run Frontend Tests
+        working-directory: frontend
+        run: npm test -- --watchAll=false
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [backend-tests, frontend-tests]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Build Docker Image
+        run: |
+          docker build -t video_subtitle_generator .
