@@ -23,7 +23,3 @@ A simple, real‑time video automated subtitle generator using pre‑trained ASR
 
 ```bash
 python -m app.main --video path/to/video.mp4 --output subtitles.srt
-
-
-
-
